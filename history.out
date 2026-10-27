@@ -1,0 +1,115 @@
+    1  ping -c 4 8.8.8.8 > ~/ping.out
+    2  sudo dnf update -y
+    3  sudo dnf intall -y libcap-ng-utils
+    4  sudo dnf install -y libcap-ng-utils
+    5  sudo dnf download tcpdump -y --destdir=/tmp
+    6  sudo rpm -ivh /tmp/tcpdump-*.rpm
+    7  sudo rpm -ivh --nodeps /tmp/tcpdump-*.rpm
+    8  tcpdump --version
+    9  sudo dnf history > ~/dnf.out
+   10  isbik
+   11  lsblk
+   12  sudo dnf install -y util-linux
+   13  lsblk
+   14  sudo fdisk /dev/sdb
+   15  sudo mkfs.ext4 -L MEPHI_WEB /dev/sdb1
+   16  sudo mkdir -p /mephi-web
+   17  echo "LABEL=MEPHI_WEB /mephi-web ext4 defaults 0 2" | sudo tee -a /etc/fstab
+   18  sudo mount -a
+   19  df -h | grep mephi-web
+   20  [200~sudo mount -a~
+   21  sudo mount -a
+   22  df -h | grep mephi-web
+   23  sudo systemctl enable --now nginx
+   24  sudo dnf install -y nginx
+   25  sudo systemctl enable --now nginx
+   26  systemctl status nginx
+   27  sudo journalctl -u nginx -b > ~/journalctl.out
+   28  sudo mkdir -p /data/mephi-2026
+   29  sudo groupadd devs
+   30  sudo useradd -u 5501 -G devs -m user1
+   31  sudo useradd -u 5502 -G devs -m user2
+   32  sudo useradd -u 5503 -G devs -m user3
+   33  sudo groupadd -g 4444 curators
+   34  sudo useradd -g curators -m curator1
+   35  sudo useradd -g curators -m curator2
+   36  sudo chown root:devs /data/mephi-2026
+   37  sudo chmod 2770 /data/mephi-2026
+   38  sudo setfacl -m g:curators:r-x /data/mephi-2026
+   39  sudo setfacl -d -m g:curators:r-- /data/mephi-2026
+   40  getfacl /data/mephi-2026
+   41  sudo chmod u-s /usr/sbin/tcpdump
+   42  sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+   43  sudo -u user1 tcpdump --version
+   44  getenforce
+   45  sudo chcon -R -t httpd_sys_content_t /mephi-web
+   46  echo "Hello from Student: 265903" | sudo tee /mephi-web/index.html
+   47  sudo nano /etc/nginx/nginx.conf
+   48  sudo systemctl restart nginx
+   49  curl http://localhost/
+   50  curl http://localhost/ > ~/curl.out
+   51  sudo usermod -s /sbin/nologin curator1
+   52  sudo usermod -s /sbin/nologin curator2
+   53  sudo chage -M 90 user1
+   54  sudo chage -M 90 user2
+   55  sudo chage -M 90 user3
+   56  sudo sed -i 's/^# minlen =.*/minlen = 12/' /etc/security/pwquality.conf
+   57  curl http://localhost/
+   58  history > ~/history.out
+   59  stat /data/mephi-2026 > ~/stat.out
+   60  stat /mephi-web >> ~/stat.out
+   61  stat /usr/sbin/tcpdump >> ~/stat.out
+   62  getcap /usr/sbin/tcpdump > ~/getcap.out
+   63  getenforce > ~/getenforce.out
+   64  cp /etc/fstab ~/
+   65  cp /etc/passwd ~/
+   66  cp /etc/group ~/
+   67  sudo cp /etc/shadow ~/
+   68  cp /etc/security/pwquality.conf ~/
+   69  ls -l ~/*.out ~/*.conf ~/*.png ~/fstab ~/passwd ~/group ~/shadow
+   70  curl http://localhost/
+   71  ls -l ~/mephi-screenshot.png
+   72  cd ~
+   73  git init
+   74  git add .
+   75  sudo chown am:am ~/shadow
+   76  git add .
+   77  sudo chmod +r ~/shadow
+   78  git add .
+   79  git commit -m "Выполнение сессионного проекта по безопасности Linux"
+   80  git branch -M main
+   81  git remote add origin https://github.com/ВАШ_ЛОГИН/mephi-session-project-2026.git
+   82  git push -u origin main
+   83  git remote add origin https://github.com/czj6ycw7yk-png/mephi-session-project-2026.git
+   84  git remote remove origin
+   85  git remote add origin https://github.com/czj6ycw7yk-png/mephi-session-project-2026.git
+   86  git push -u origin main
+   87  git remote remove origin
+   88  git remote add origin https://github.com/czj6ycw7yk-png/mephi-session-project-2026.git
+   89  git push -u origin main
+   90  git remote set-url origin https://czj6ycw7yk-png@github.com/czj6ycw7yk-png/mephi-session-project-2026.git
+   91  git push -u origin main
+   92  # 1. Создание пользователя (если удален)
+   93  sudo userdel -r user1 2>/dev/null
+   94  sudo groupadd students 2>/dev/null
+   95  sudo useradd -u 1234 -G students -m user1
+   96  echo "user1:1234" | sudo chpasswd
+   97  sudo chage -M 90 user1
+   98  # 2. Мониторинг (SUID и процессы)
+   99  sudo find / -perm -4000 -type f 2>/dev/null > ~/suid_files.out
+  100  ps -eo ruid,euid,pid,comm | awk '$1 != 0 && $2 == 0' > ~/euid_root_processes.out
+  101  # 3. Механизм SUID (cat)
+  102  cp /bin/cat ~/mycat
+  103  sudo chown root:root ~/mycat
+  104  sudo chmod u+s ~/mycat
+  105  # 4. Механизм привилегий (chown)
+  106  cp /usr/bin/chown ~/mychown
+  107  sudo setcap cap_chown+ep ~/mychown
+  108  getcap ~/mychown > ~/getcap.out
+  109  # 5. Механизм sudo (время)
+  110  echo "user1 ALL=(root) /usr/bin/timedatectl" | sudo tee /etc/sudoers.d/user1_time > /dev/null
+  111  # 6. Сбор артефактов
+  112  stat /home/user1 > ~/stat.out
+  113  stat ~/mycat >> ~/stat.out
+  114  stat ~/mychown >> ~/stat.out
+  115  history > ~/history.out
